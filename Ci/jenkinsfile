@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'Dockerfile:latest'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout gitlab
+            }
+        }
+
+        stage('Static Analysis') {
+            steps {
+                // Example: Python static analysis with pylint
+                sh 'pip install pylint'
+                sh 'pylint **/*.py || true'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME} ."
+            }
+        }
+
+        stage('Trivy Scan') {
+            steps {
+                sh '''
+                    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+                        aquasec/trivy:latest image --exit-code 0 --no-progress ${IMAGE_NAME}
+                '''
+            }
+        }
+    }
+}
