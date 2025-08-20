@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Use the git step with your repository URL
-                git url: 'git@github.com:d6k1281g-lab/Repo1.git', branch: 'main'
+                git clone https://d6k1281g-lab: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@github.com/d6k1281g-lab/Repo1.git
             }
         }
 
