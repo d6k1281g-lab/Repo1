@@ -3,13 +3,14 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'Dockerfile:latest'
+        GITHUB_TOKEN = credentials('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')
     }
 
     stages {
         stage('Checkout') {
-            steps {
-                // Use the git step with your repository URL
-                git clone https://d6k1281g-lab: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@github.com/d6k1281g-lab/Repo1.git
+             steps {
+                git url: 'https://github.com/d6k1281g-lab/Repo1.git',
+                    credentialsId: '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'
             }
         }
 
